@@ -791,9 +791,9 @@ class SimplyTypedSpace(Space):
         if self.dtype is not None:
             if (is_complex(batch.dtype) and not is_complex(self.dtype)) or \
                (not is_integral(batch.dtype) and is_integral(self.dtype)):
-                raise TypeError("Cannot safely cast batch dtype %s to "
-                                "space's dtype %s. " %
-                                (batch.dtype, self.dtype))
+                # raise TypeError("Cannot safely cast batch dtype %s to "
+                print "Might not be safely cast batch dtype %s to space's dtype %s." \
+                        % (batch.dtype, self.dtype)
 
     @property
     def dtype(self):

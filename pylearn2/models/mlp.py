@@ -3996,7 +3996,7 @@ class PretrainedLayer(Layer):
 
     @wraps(Layer.set_input_space)
     def set_input_space(self, space):
-
+        print space, self.get_input_space()
         assert self.get_input_space() == space
 
     @wraps(Layer.get_params)

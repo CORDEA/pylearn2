@@ -67,7 +67,8 @@ class CSVDataset(DenseDesignMatrix):
                  start=None,
                  stop=None,
                  start_fraction=None,
-                 end_fraction=None):
+                 end_fraction=None,
+                 one_hot=True):
         """
         .. todo::
 
@@ -82,6 +83,7 @@ class CSVDataset(DenseDesignMatrix):
         self.stop = stop
         self.start_fraction = start_fraction
         self.end_fraction = end_fraction
+        self.one_hot = one_hot
 
         self.view_converter = None
 
@@ -161,12 +163,24 @@ class CSVDataset(DenseDesignMatrix):
 
         if self.expect_labels:
             y = data[:, 0]
+            # X = data[:, 3:]
             X = data[:, 1:]
-            y = y.reshape((y.shape[0], 1))
+            # y = y.reshape((y.shape[0], 1))
+            # get unique labels and map them to one-hot positions
+            labels = np.unique(y)
+            labels = { x: i for i, x in enumerate( labels ) }
+
+            if self.one_hot:
+                one_hot = np.zeros(( y.shape[0], len( labels )), dtype='int64' )
+                for i in xrange( y.shape[0] ):
+                    label = y[i]
+                    label_position = labels[label]
+                    one_hot[i,label_position] = 1.
+                y = one_hot
         else:
             X = data
             y = None
 
-        X, y = take_subset(X, y)
+        # X, y = take_subset(X, y)
 
         return X, y

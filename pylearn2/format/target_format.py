@@ -95,7 +95,11 @@ class OneHotFormatter(object):
             raise ValueError("Targets needs to be 1D or 2D, but received %d "
                              "dimensions" % targets.ndim)
         if 'int' not in str(targets.dtype):
-            raise TypeError("need an integer array for targets")
+            try:
+                print "Run the conversion to int64 from %s" % (targets.dtype)
+                targets = np.array([[int(r) for r in label] for label in targets])
+            except:
+                raise TypeError("need an integer array for targets, %s" % (targets.dtype))
         if sparse:
             if not scipy_available:
                 raise RuntimeError("The converting of indices to a sparse "
